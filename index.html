@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Welcome to Glitch!</title>
+    <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
+    <meta charset="utf-8">
+    <script src="https://aframe.io/releases/0.6.0/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-physics-system@%5E1.4.x/dist/aframe-physics-system.min.js"></script>
+  </head>
+  <body>
+    <a-scene physics="debug: true">
+      <a-assets>
+        <!-- Mario: https://vr.google.com/objects/0P2EpgeguQV -->
+        <a-asset-item id="mario-obj" src="https://cdn.glitch.com/9152955f-bedd-4841-8ce7-182958f1f06e%2Fmodel.obj?1499896979737"></a-asset-item>
+        <a-asset-item id="mario-mtl" src="https://cdn.glitch.com/9152955f-bedd-4841-8ce7-182958f1f06e%2Fmaterials.mtl?1499896977081"></a-asset-item>
+
+        <!-- Video from aframe.io example -->
+        <video id="video" src="https://ucarecdn.com/fadab25d-0b3a-45f7-8ef5-85318e92a261/"
+               autoplay loop crossorigin="anonymous"></video>
+      </a-assets>
+      <a-entity id="boss"
+                obj-model="obj: #mario-obj; mtl: #mario-mtl" position="0 1 -10" rotation="0 0 0" dynamic-body="mass: 10"></a-entity>
+      <a-sphere position="0 2.534 -4.826" color="red" scale="1 1 1" dynamic-body="mass: 1" radius="0.1"></a-sphere>
+      <a-entity id="player"
+                camera="userHeight: 1.6" look-controls wasd-controls static-body>
+        <a-cylinder position="0 -0.75 0" geometry="height:1.7;segmentsRadial:8;radius:0.25" visible="false"></a-cylinder>
+      </a-entity>
+      <a-plane static-body rotation="-90 0 0" width="100" height="100" color="black" visible="false"></a-plane>
+      <!-- <a-videosphere src="#video" rotation="0 180 0"></a-videosphere> -->
+    </a-scene>
+    <script>
+      var playerEl = document.querySelector('#player');
+      playerEl.addEventListener('collide', function (e) {
+        console.log('Player has collided with body #' + e.detail.body.id + "\n\n  e.detail.target.el = " + e.detail.target.el + 
+                                                                             "\n  e.detail.body.el = " + e.detail.body.el +
+                                                                             "\n  e.detail.contact = " + e.detail.contact +
+                                                                             "\n  e.detail.contact.ni = " + e.detail.contact.ni);
+
+        e.detail.target.el;  // Original entity (playerEl).
+        e.detail.body.el;    // Other entity, which playerEl touched.
+        e.detail.contact;    // Stats about the collision (CANNON.ContactEquation).
+        e.detail.contact.ni; // Normal (direction) of the collision (CANNON.Vec3).
+      });
+    </script>
+  </body>
+</html>
